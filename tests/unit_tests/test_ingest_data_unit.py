@@ -26,7 +26,7 @@ def test_is_dataframe(read_raw_data):
 @pytest.mark.unit
 def test_initiate_data_ingestion():
     ingestion = IngestData()
-    _, _, train_df, test_df = ingestion.initiate_data_ingestion(create_artifacts_folder=False, save_objects=False)
+    _, _, train_df, test_df = ingestion.initiate_data_ingestion(create_artifacts_folder=False, save_objects=False, return_datasets=True)
     assert train_df is not None
     assert test_df is not None
 
@@ -34,6 +34,6 @@ def test_initiate_data_ingestion():
 @pytest.mark.unit
 def test_train_and_test_is_dataframe():
     ingestion = IngestData()
-    _, _, train_df, test_df = ingestion.initiate_data_ingestion(create_artifacts_folder=False, save_objects=False)
+    _, _, train_df, test_df = ingestion.initiate_data_ingestion(create_artifacts_folder=False, save_objects=False, return_datasets=True)
     assert isinstance(train_df, pd.DataFrame)
     assert isinstance(test_df, pd.DataFrame)
