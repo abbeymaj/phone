@@ -26,7 +26,12 @@ class IngestData():
         self.data_ingestion_config = DataIngestionConfig()
     
     # Creating a method to ingest the data
-    def initiate_data_ingestion(self, create_artifacts_folder: bool = True, save_objects: bool =True):
+    def initiate_data_ingestion(
+        self, 
+        create_artifacts_folder: bool = True, 
+        save_objects: bool =True,
+        return_datasets: bool = False
+        ):
         '''
         This method will ingest the data from source, split the dataset into a train
         and test dataset. The function will also create the artifacts folder and store
@@ -55,12 +60,18 @@ class IngestData():
                 train_df.to_parquet(self.data_ingestion_config.train_data_path, index=False, compression='zstd')
                 test_df.to_parquet(self.data_ingestion_config.test_data_path, index=False, compression='zstd')
             
-            return (
-                self.data_ingestion_config.train_data_path,
-                self.data_ingestion_config.test_data_path,
-                train_df,
-                test_df
-            )
+            if return_datasets:
+                return (
+                    self.data_ingestion_config.train_data_path,
+                    self.data_ingestion_config.test_data_path,
+                    train_df,
+                    test_df
+                )
+            else:
+                return (
+                    self.data_ingestion_config.train_data_path,
+                    self.data_ingestion_config.test_data_path
+                )
             
         except Exception as e:
             raise CustomException(e, sys) from e
