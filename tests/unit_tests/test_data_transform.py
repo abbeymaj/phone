@@ -30,3 +30,21 @@ def test_generate_features(create_train_dataset):
     assert 'age_int_screentime' in trans_df.columns
     assert 'id' not in trans_df.columns
     assert len(trans_df.columns) == 24
+
+
+# Verifying that the preprocessing object is being created
+@pytest.mark.unit
+def test_create_preprocessing_object(create_train_dataset):
+    df = create_train_dataset
+    transform = TransformData()
+    preprocess_obj = transform.create_preprocessing_object(df)
+    assert preprocess_obj is not None
+
+# Verifying that the data transformation process is working as expected
+@pytest.mark.unit
+def test_initiate_data_transformation(create_train_dataset):
+    transform = TransformData()
+    train_arr_comb, test_arr_comb, preprocessor_obj = transform.initiate_data_transformation(save_object=False)
+    assert train_arr_comb is not None
+    assert test_arr_comb is not None
+    assert preprocessor_obj is not None

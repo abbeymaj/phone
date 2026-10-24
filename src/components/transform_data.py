@@ -148,7 +148,44 @@ class TransformData():
         ========================================================================================
         '''
         try:
-            pass
+            # Reading the train and test datasets
+            train_data = pd.read_parquet(self.data_ingestion_config.train_data_path)
+            test_data = pd.read_parquet(self.data_ingestion_config.test_data_path)
+            
+            # Separating features and target for the train dataset
+            train_features = train_data.copy().drop(labels=['addicted_label'], axis=1)
+            train_target = train_data['addicted_label'].copy()
+            
+            # Separating the features and target for the test dataset
+            test_features = test_data.copy().drop(labels=['addicted_label'], axis=1)
+            test_target = test_data['addicted_label'].copy()
+            
+            # Creating the new features for the train dataset
+            train_features_sub = self.generate_features(train_features)
+            
+            # Creating the new features for the test dataset
+            test_features_sub = self.generate_features(test_features)
+            
+            # Creating the preprocessing object
+            preprocessor_obj = self.create_preprocessing_object(train_features_sub)
+            
+            # Transforming the train and test datasets
+            train_arr = preprocessor_obj.fit_transform(train_features_sub)
+            test_arr = preprocessor_obj.transform(test_features_sub)
+            
+            # Combing the transformed datasets with their respective targets
+            train_arr_comb = pd.concat([train_arr, train_target], axis=1)
+            test_arr_comb = pd.concat([test_arr, test_target], axis=1)
+            
+            # Saving the preprocessing object if the save_object flag is set to True
+            if save_object:
+                joblib.dump(self.data_transformation_config.preprocessor_obj_path, preprocessor_obj)
+            
+            return (
+                train_arr_comb,
+                test_arr_comb,
+                preprocessor_obj
+            )
         
         except Exception as e:
             raise CustomException(e, sys) from e
