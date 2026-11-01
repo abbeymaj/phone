@@ -14,3 +14,10 @@ class DataIngestionConfig():
 @dataclass
 class DataTransformationConfig():
     preprocessor_obj_path: str = os.path.join('artifacts', 'preprocessor.joblib')
+
+# Creating a dataclass to build the feature store and store the transformed
+# datasets.
+@dataclass
+class FeatureStoreConfig():
+    xform_train_path:str = os.path.join('feature_store', 'xform_train.parquet')
+    xform_test_path:str = os.path.join('feature_store', 'xform_test.parquet')
