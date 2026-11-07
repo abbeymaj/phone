@@ -179,7 +179,7 @@ class TransformData():
             
             # Saving the preprocessing object if the save_object flag is set to True
             if save_object:
-                joblib.dump(self.data_transformation_config.preprocessor_obj_path, preprocessor_obj)
+                joblib.dump(preprocessor_obj, self.data_transformation_config.preprocessor_obj_path)
             
             return (
                 train_arr_comb,
