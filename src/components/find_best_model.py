@@ -151,8 +151,11 @@ class FindBestModel():
         ================================================================================
         """
         try:
+            # Defining the sampler and the pruner for the Optuna study
             sampler = optuna.samplers.TPESampler(seed=self.seed)
             pruner = optuna.pruners.MedianPruner(n_startup_trials=5, n_warmup_steps=1)
+            
+            # Creating the study object and finding the best params
             study = optuna.create_study(sampler=sampler, pruner=pruner, direction='maximize')
             study.optimize(self.objective, n_trials=self.n_trials)
             best_params = study.best_params
